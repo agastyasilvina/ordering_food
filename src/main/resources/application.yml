@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: webflux-redis-demo
+
+  data:
+    redis:
+      host: localhost   # or the Docker container hostname if different
+      port: 6379
+
+server:
+  port: 8080
