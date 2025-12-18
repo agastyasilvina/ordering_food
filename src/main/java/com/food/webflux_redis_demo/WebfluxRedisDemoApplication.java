@@ -3,7 +3,17 @@ package com.food.webflux_redis_demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.aot.hint.RuntimeHintsRegistrar;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportRuntimeHints;
+
+import com.food.webflux_redis_demo.config.NativeResourcesHints;
+
+
+
 @SpringBootApplication
+@ImportRuntimeHints(NativeResourcesHints.class)
 public class WebfluxRedisDemoApplication {
 
 	public static void main(String[] args) {

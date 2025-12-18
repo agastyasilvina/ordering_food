@@ -76,6 +76,17 @@
                     <target>8</target>
                 </configuration>
 			</plugin>
+    <plugin>
+      <groupId>org.graalvm.buildtools</groupId>
+      <artifactId>native-maven-plugin</artifactId>
+      <version>0.10.6</version>
+
+      <configuration>
+        <buildArgs>
+          <buildArg>-H:IncludeResources=.*error\.json$</buildArg>
+        </buildArgs>
+      </configuration>
+    </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
