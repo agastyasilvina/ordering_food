@@ -1,4 +1,4 @@
-package com.bootleg.brevo.config;
+package com.bootleg.brevo.configuration;
 
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
@@ -7,7 +7,8 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 
 @Configuration
 @ImportRuntimeHints(NativeResourcesHints.class)
-class NativeHintsConfig {}
+class NativeHintsConfig {
+}
 
 public class NativeResourcesHints implements RuntimeHintsRegistrar {
   @Override
