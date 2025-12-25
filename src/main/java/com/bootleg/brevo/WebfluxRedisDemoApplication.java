@@ -1,4 +1,4 @@
-package com.food.webflux_redis_demo;
+package com.bootleg.brevo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,7 +8,7 @@ import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportRuntimeHints;
 
-import com.food.webflux_redis_demo.config.NativeResourcesHints;
+import com.bootleg.brevo.config.NativeResourcesHints;
 
 
 

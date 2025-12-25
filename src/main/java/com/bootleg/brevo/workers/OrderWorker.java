@@ -1,4 +1,4 @@
-package com.food.webflux_redis_demo.workers;
+package com.bootleg.brevo.workers;
 
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.stereotype.Component;

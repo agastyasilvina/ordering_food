@@ -1,4 +1,4 @@
-package com.food.webflux_redis_demo.config;
+package com.bootleg.brevo.config;
 
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;

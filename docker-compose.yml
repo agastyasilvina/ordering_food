@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  bootleg-postgres:
+    image: postgres:16-alpine
+    container_name: bootleg-postgres
+    environment:
+      POSTGRES_DB: bootleg
+      POSTGRES_USER: bootleg
+      POSTGRES_PASSWORD: bootleg
+    ports:
+      - "5432:5432"
+    volumes:
+      - bootleg_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bootleg -d bootleg"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  bootleg_pgdata:
