@@ -1,4 +1,4 @@
-package com.bootleg.brevo.api.dto;
+package com.bootleg.brevo.order.dto;
 
 
 public class OrderDtos {

@@ -1,9 +1,9 @@
-package com.bootleg.brevo.api;
+package com.bootleg.brevo.order.api;
 
-import com.bootleg.brevo.api.dto.OrderDtos.CancelOrderResponse;
-import com.bootleg.brevo.api.dto.OrderDtos.CreateOrderRequest;
-import com.bootleg.brevo.api.dto.OrderDtos.OrderResponse;
-import com.bootleg.brevo.services.OrderService;
+import com.bootleg.brevo.order.dto.OrderDtos.CancelOrderResponse;
+import com.bootleg.brevo.order.dto.OrderDtos.CreateOrderRequest;
+import com.bootleg.brevo.order.dto.OrderDtos.OrderResponse;
+import com.bootleg.brevo.order.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

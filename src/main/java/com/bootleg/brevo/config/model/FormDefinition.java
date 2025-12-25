@@ -6,5 +6,4 @@ public record FormDefinition(
   String formCode,
   int sortOrder,
   List<FieldDefinition> fields
-) {
-}
+) {}

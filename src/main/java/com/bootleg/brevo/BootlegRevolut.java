@@ -8,10 +8,10 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 
 @SpringBootApplication
 @ImportRuntimeHints(NativeResourcesHints.class)
-public class WebfluxRedisDemoApplication {
+public class BootlegRevolut {
 
   public static void main(String[] args) {
-    SpringApplication.run(WebfluxRedisDemoApplication.class, args);
+    SpringApplication.run(BootlegRevolut.class, args);
   }
 
 }
