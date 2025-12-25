@@ -1,4 +1,4 @@
-package com.bootleg.brevo.workers;
+package com.bootleg.brevo.order.workers;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
