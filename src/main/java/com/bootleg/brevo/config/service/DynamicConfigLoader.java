@@ -21,6 +21,10 @@ public class DynamicConfigLoader {
     this.repo = repo;
   }
 
+  private static String normalise(String s) {
+    return s == null ? "" : s.trim().toUpperCase();
+  }
+
   public Mono<GroupDefinition> getGroupDefinition(String journeyCode, int groupNo) {
     String jc = normalise(journeyCode);
 
@@ -84,9 +88,5 @@ public class DynamicConfigLoader {
               });
           });
       });
-  }
-
-  private static String normalise(String s) {
-    return s == null ? "" : s.trim().toUpperCase();
   }
 }

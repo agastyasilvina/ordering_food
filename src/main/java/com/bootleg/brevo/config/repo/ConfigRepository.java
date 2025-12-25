@@ -17,14 +17,36 @@ public class ConfigRepository {
     this.db = db;
   }
 
-  // ---------- Row DTOs ----------
-  public record GroupFormRow(String formCode, int sortOrder) {}
-  public record FormFieldRow(String formCode, String fieldCode, boolean required, int sortOrder) {}
-  public record ParentChildFormRow(String parentFormCode, String childFormCode) {}
+  // ---------- Helpers ----------
+  private static String namedInClause(String prefix, int size) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < size; i++) {
+      if (i > 0) sb.append(", ");
+      sb.append(":").append(prefix).append(i);
+    }
+    return sb.toString();
+  }
+
+  private static <T> T must(T v) {
+    if (v == null) throw new IllegalStateException("Unexpected NULL from DB mapping");
+    return v;
+  }
+
+  // (If you need it later)
+  @SuppressWarnings("unused")
+  private static List<String> toList(Iterable<String> it) {
+    if (it == null) return List.of();
+    if (it instanceof List<String> list) return list;
+    ArrayList<String> out = new ArrayList<>();
+    for (String s : it) out.add(s);
+    return out;
+  }
 
   // ---------- Queries ----------
 
-  /** Checks if a group belongs to a journey (prevents nonsense calls). */
+  /**
+   * Checks if a group belongs to a journey (prevents nonsense calls).
+   */
   public Mono<Boolean> existsGroupInJourney(String journeyCode, int groupNo) {
     String sql = """
       SELECT 1
@@ -45,7 +67,9 @@ public class ConfigRepository {
       .defaultIfEmpty(false);
   }
 
-  /** Group -> ordered forms. */
+  /**
+   * Group -> ordered forms.
+   */
   public Flux<GroupFormRow> findFormsForGroup(int groupNo) {
     String sql = """
       SELECT f.form_code,
@@ -66,7 +90,9 @@ public class ConfigRepository {
       .all();
   }
 
-  /** Forms -> ordered fields (safe IN binding, no array codec drama). */
+  /**
+   * Forms -> ordered fields (safe IN binding, no array codec drama).
+   */
   public Flux<FormFieldRow> findFieldsForForms(List<String> formCodes) {
     if (formCodes == null || formCodes.isEmpty()) return Flux.empty();
 
@@ -98,7 +124,9 @@ public class ConfigRepository {
       .all();
   }
 
-  /** Parent forms -> child forms mapping (safe IN binding). */
+  /**
+   * Parent forms -> child forms mapping (safe IN binding).
+   */
   public Flux<ParentChildFormRow> findChildFormsForParents(List<String> parentFormCodes) {
     if (parentFormCodes == null || parentFormCodes.isEmpty()) return Flux.empty();
 
@@ -128,28 +156,13 @@ public class ConfigRepository {
       .all();
   }
 
-  // ---------- Helpers ----------
-  private static String namedInClause(String prefix, int size) {
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < size; i++) {
-      if (i > 0) sb.append(", ");
-      sb.append(":").append(prefix).append(i);
-    }
-    return sb.toString();
+  // ---------- Row DTOs ----------
+  public record GroupFormRow(String formCode, int sortOrder) {
   }
 
-  private static <T> T must(T v) {
-    if (v == null) throw new IllegalStateException("Unexpected NULL from DB mapping");
-    return v;
+  public record FormFieldRow(String formCode, String fieldCode, boolean required, int sortOrder) {
   }
 
-  // (If you need it later)
-  @SuppressWarnings("unused")
-  private static List<String> toList(Iterable<String> it) {
-    if (it == null) return List.of();
-    if (it instanceof List<String> list) return list;
-    ArrayList<String> out = new ArrayList<>();
-    for (String s : it) out.add(s);
-    return out;
+  public record ParentChildFormRow(String parentFormCode, String childFormCode) {
   }
 }

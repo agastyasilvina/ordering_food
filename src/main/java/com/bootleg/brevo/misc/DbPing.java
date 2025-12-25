@@ -5,7 +5,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Component;
 
-// Testing connection to the db
 @Component
 public class DbPing implements CommandLineRunner {
 

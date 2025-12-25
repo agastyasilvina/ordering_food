@@ -20,9 +20,9 @@ public class BrevoConfigController {
 
   @GetMapping("/journeys/{journeyCode}/groups/{groupNo}")
   public Mono<GroupDefinition> getGroupDefinition(
-      @PathVariable String journeyCode,
-      @PathVariable @Min(1) int groupNo,
-      @RequestHeader(value = "Language", defaultValue = "id-ID") String language
+    @PathVariable String journeyCode,
+    @PathVariable @Min(1) int groupNo,
+    @RequestHeader(value = "Language", defaultValue = "id-ID") String language
   ) {
     return loader.getGroupDefinition(journeyCode, groupNo);
   }

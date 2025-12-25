@@ -7,7 +7,8 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 
 @Configuration
 @ImportRuntimeHints(NativeResourcesHints.class)
-class NativeHintsConfig {}
+class NativeHintsConfig {
+}
 
 public class NativeResourcesHints implements RuntimeHintsRegistrar {
   @Override
