@@ -1,4 +1,4 @@
-package com.bootleg.brevo.config;
+package com.bootleg.brevo.configuration;
 
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;

@@ -1,11 +1,16 @@
 spring:
   application:
-    name: webflux-redis-demo
+    name: bootleg-revolut
 
   data:
     redis:
       host: localhost   # or the Docker container hostname if different
       port: 6379
+
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/bootleg
+    username: bootleg
+    password: bootleg
 
 server:
   port: 8080

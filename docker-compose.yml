@@ -19,5 +19,21 @@ services:
       retries: 10
     restart: unless-stopped
 
+  bootleg-redis:
+    image: redis:7-alpine
+    container_name: bootleg-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - bootleg_redisdata:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
 volumes:
   bootleg_pgdata:
+  bootleg_redisdata:
