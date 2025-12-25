@@ -83,12 +83,13 @@ public class ConfigRepository {
       """;
 
     return db.sql(sql)
-      .bind("groupNo", groupNo)
+      .bind("groupNo", Integer.valueOf(groupNo))
       .map((row, md) -> new GroupFormRow(
         must(row.get("form_code", String.class)),
         must(row.get("form_sort_order", Integer.class))
       ))
       .all();
+
   }
 
   /**
@@ -189,6 +190,42 @@ public class ConfigRepository {
         row.get("min_value", BigDecimal.class),
         row.get("max_value", BigDecimal.class)
       ))
+      .all();
+  }
+
+  /**
+   * Active journeys.
+   */
+  public Flux<String> findActiveJourneyCodes() {
+    String sql = """
+    SELECT j.journey_code
+    FROM brevo_config.journey_tm j
+    WHERE j.is_active = true
+    ORDER BY j.journey_code
+    """;
+
+    return db.sql(sql)
+      .map((row, md) -> must(row.get("journey_code", String.class)))
+      .all();
+  }
+
+  /**
+   * All groupNos belonging to a journey.
+   */
+  public Flux<Integer> findGroupNosByJourneyCode(String journeyCode) {
+    String sql = """
+    SELECT DISTINCT g.group_no
+    FROM brevo_config.journey_tm j
+    JOIN brevo_config.journey_group_tr jgt ON jgt.journey_id = j.journey_id
+    JOIN brevo_config.group_tm g ON g.group_id = jgt.group_id
+    WHERE j.journey_code = :journeyCode
+      AND j.is_active = true
+    ORDER BY g.group_no
+    """;
+
+    return db.sql(sql)
+      .bind("journeyCode", journeyCode)
+      .map((row, md) -> must(row.get("group_no", Integer.class)))
       .all();
   }
 
