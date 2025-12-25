@@ -1,0 +1,262 @@
+{
+	"info": {
+		"_postman_id": "64cd6c99-0d9c-4392-823f-04f68e8b9ebe",
+		"name": "onboarding",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30833425"
+	},
+	"item": [
+		{
+			"name": "get-group-config-info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/config/journeys/JOURNEY_B/groups/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"config",
+						"journeys",
+						"JOURNEY_B",
+						"groups",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PopulateAllJourney",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/config/refresh",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"config",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPreloadedConfig",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/config/preloaded",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"config",
+						"preloaded"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-session",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"journeyCode\":\"JOURNEY_B\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/runtime/sessions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"runtime",
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "payload-check",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payloadVersion\": 1,\r\n    \"submissions\": [\r\n        {\r\n            \"formCode\": \"FORM_A\",\r\n            \"fields\": {\r\n                \"FIELD_A1\": \"x\"\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/runtime/payload/check?Content-Type=application/json",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"runtime",
+						"payload",
+						"check"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validate_valid",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"payloadVersion\": 1,\r\n  \"submissions\": [\r\n    {\r\n      \"formCode\": \"FORM_A\",\r\n      \"fields\": {\r\n        \"FIELD_A1\": \"x\",\r\n        \"FIELD_A2\": \"10\"\r\n      }\r\n    },\r\n    {\r\n      \"formCode\": \"FORM_B\",\r\n      \"fields\": {\r\n        \"FIELD_A1\": \"z\",\r\n        \"FIELD_B2\": \"w\"\r\n      }\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/runtime/journeys/JOURNEY_A/groups/1/payload/validate?Content-Type=application/json",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"runtime",
+						"journeys",
+						"JOURNEY_A",
+						"groups",
+						"1",
+						"payload",
+						"validate"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validate_valid_child",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"payloadVersion\": 1,\r\n  \"submissions\": [\r\n    {\r\n      \"formCode\": \"FORM_A\",\r\n      \"fields\": {\r\n        \"FIELD_A1\": \"x\",\r\n        \"FIELD_A2\": \"10\"\r\n      }\r\n    },\r\n    {\r\n      \"formCode\": \"FORM_B\",\r\n      \"fields\": {\r\n        \"FIELD_A1\": \"z\",\r\n        \"FIELD_B2\": \"w\"\r\n      }\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/runtime/journeys/JOURNEY_A/groups/1/payload/validate?Content-Type=application/json",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"runtime",
+						"journeys",
+						"JOURNEY_A",
+						"groups",
+						"1",
+						"payload",
+						"validate"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validate_invalid",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"payloadVersion\": 1,\r\n  \"submissions\": [\r\n    {\r\n      \"formCode\": \"FORM_A\",\r\n      \"fields\": {\r\n        \"FIELD_A1\": \"x\",\r\n        \"FIELD_A2\": \"10\"\r\n      }\r\n    },\r\n    {\r\n      \"formCode\": \"FORM_B\",\r\n      \"fields\": {\r\n        \"FIELD_A1\": \"z\",\r\n        \"FIELD_B2\": \"w\"\r\n      }\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/runtime/journeys/JOURNEY_A/groups/1/payload/validate?Content-Type=application/json",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"runtime",
+						"journeys",
+						"JOURNEY_A",
+						"groups",
+						"1",
+						"payload",
+						"validate"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

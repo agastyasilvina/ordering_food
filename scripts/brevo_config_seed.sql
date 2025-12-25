@@ -6,7 +6,7 @@ TRUNCATE TABLE
   brevo_config.group_invalidation_rule_tr,
   brevo_config.journey_group_tr,
   brevo_config.group_form_tr,
-  brevo_config.field_parameter_form_tr,
+  brevo_config.form_child_tr,
   brevo_config.form_field_rule_tr,
   brevo_config.form_field_tr,
   brevo_config.journey_tm,
@@ -111,7 +111,7 @@ JOIN brevo_config.field_tm fld ON fld.field_code = v.field_code;
 -- 4) PARENT → CHILD FORMS (FORM_C -> CA/CB/CC)
 -- ============================================================
 
-INSERT INTO brevo_config.field_parameter_form_tr (parent_form_tm_id, child_form_tm_id)
+INSERT INTO brevo_config.form_child_tr (parent_form_tm_id, child_form_tm_id)
 SELECT p.form_id, c.form_id
 FROM brevo_config.form_tm p
 JOIN brevo_config.form_tm c ON c.form_code IN ('FORM_CA','FORM_CB','FORM_CC')
