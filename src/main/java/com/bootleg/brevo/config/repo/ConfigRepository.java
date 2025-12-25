@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,16 +100,17 @@ public class ConfigRepository {
     String in = namedInClause("c", formCodes.size());
 
     String sql = """
-      SELECT f.form_code,
-             fld.field_code,
-             fft.is_required,
-             fft.sort_order AS field_sort_order
-      FROM brevo_config.form_tm f
-      JOIN brevo_config.form_field_tr fft ON fft.form_id = f.form_id
-      JOIN brevo_config.field_tm fld ON fld.field_id = fft.field_id
-      WHERE f.form_code IN ( %s )
-      ORDER BY f.form_code, fft.sort_order
-      """.formatted(in);
+    SELECT f.form_code,
+           fld.field_code,
+           fld.field_type,
+           fft.is_required,
+           fft.sort_order AS field_sort_order
+    FROM brevo_config.form_tm f
+    JOIN brevo_config.form_field_tr fft ON fft.form_id = f.form_id
+    JOIN brevo_config.field_tm fld ON fld.field_id = fft.field_id
+    WHERE f.form_code IN ( %s )
+    ORDER BY f.form_code, fft.sort_order
+    """.formatted(in);
 
     DatabaseClient.GenericExecuteSpec spec = db.sql(sql);
     for (int i = 0; i < formCodes.size(); i++) {
@@ -118,6 +120,7 @@ public class ConfigRepository {
     return spec.map((row, md) -> new FormFieldRow(
         must(row.get("form_code", String.class)),
         must(row.get("field_code", String.class)),
+        must(row.get("field_type", String.class)),
         Boolean.TRUE.equals(row.get("is_required", Boolean.class)),
         must(row.get("field_sort_order", Integer.class))
       ))
@@ -136,7 +139,7 @@ public class ConfigRepository {
       SELECT p.form_code AS parent_form_code,
              c.form_code AS child_form_code
       FROM brevo_config.form_tm p
-      JOIN brevo_config.field_parameter_form_tr rel
+      JOIN brevo_config.form_child_tr rel
            ON rel.parent_form_tm_id = p.form_id
       JOIN brevo_config.form_tm c
            ON c.form_id = rel.child_form_tm_id
@@ -156,13 +159,60 @@ public class ConfigRepository {
       .all();
   }
 
+  public Flux<FormFieldRuleRow> findRulesForForms(List<String> formCodes) {
+    if (formCodes == null || formCodes.isEmpty()) return Flux.empty();
+
+    String in = namedInClause("r", formCodes.size());
+
+    String sql = """
+    SELECT f.form_code,
+           fld.field_code,
+           r.rule_kind,
+           r.min_value,
+           r.max_value
+    FROM brevo_config.form_tm f
+    JOIN brevo_config.form_field_rule_tr r ON r.form_id = f.form_id
+    JOIN brevo_config.field_tm fld ON fld.field_id = r.field_id
+    WHERE f.form_code IN ( %s )
+    ORDER BY f.form_code, fld.field_code, r.rule_kind
+    """.formatted(in);
+
+    DatabaseClient.GenericExecuteSpec spec = db.sql(sql);
+    for (int i = 0; i < formCodes.size(); i++) {
+      spec = spec.bind("r" + i, formCodes.get(i));
+    }
+
+    return spec.map((row, md) -> new FormFieldRuleRow(
+        must(row.get("form_code", String.class)),
+        must(row.get("field_code", String.class)),
+        must(row.get("rule_kind", String.class)),
+        row.get("min_value", BigDecimal.class),
+        row.get("max_value", BigDecimal.class)
+      ))
+      .all();
+  }
+
   // ---------- Row DTOs ----------
   public record GroupFormRow(String formCode, int sortOrder) {
   }
 
-  public record FormFieldRow(String formCode, String fieldCode, boolean required, int sortOrder) {
-  }
+  public record FormFieldRow(
+    String formCode,
+    String fieldCode,
+    String fieldType,
+    boolean required,
+    int sortOrder
+  ) {}
+
 
   public record ParentChildFormRow(String parentFormCode, String childFormCode) {
   }
+
+  public record FormFieldRuleRow(
+    String formCode,
+    String fieldCode,
+    String ruleKind,
+    BigDecimal min,
+    BigDecimal max
+  ) {}
 }
