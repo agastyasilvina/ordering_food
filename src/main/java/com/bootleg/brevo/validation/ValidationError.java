@@ -11,4 +11,5 @@ public record ValidationError(
   String rule,              // REQUIRED / LENGTH / VALUE / TYPE / UNKNOWN_FIELD / UNKNOWN_RULE
   String message,
   Map<String, Object> meta
-) {}
+) {
+}

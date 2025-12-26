@@ -1,10 +1,11 @@
 package com.bootleg.brevo.runtime.entity;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Table("application")
 public record ApplicationEntity(
@@ -35,4 +36,5 @@ public record ApplicationEntity(
 
   @Column("updated_at")
   OffsetDateTime updatedAt
-) {}
+) {
+}

@@ -1,9 +1,10 @@
 package com.bootleg.brevo.runtime.entity;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Table(schema = "bootleg_runtime", name = "obs_group_state")
 public record ObsGroupStateEntity(
@@ -27,4 +28,5 @@ public record ObsGroupStateEntity(
 
   @Column("updated_at")
   OffsetDateTime updatedAt
-) {}
+) {
+}

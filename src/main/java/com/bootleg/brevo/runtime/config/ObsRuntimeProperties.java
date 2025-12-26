@@ -1,7 +1,8 @@
 package com.bootleg.brevo.runtime.config;
 
-import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.time.Duration;
 
 @ConfigurationProperties(prefix = "obs.runtime")
 public record ObsRuntimeProperties(

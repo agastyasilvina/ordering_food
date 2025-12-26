@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * Loads a GroupDefinition from brevo_config.
- *
+ * <p>
  * IMPORTANT:
  * A group can contain parent forms (via group_form_tr) and those parents can have child forms (via form_child_tr).
  * We flatten the group by loading fields/rules for BOTH parents + children and include child forms as FormDefinitions.

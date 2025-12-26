@@ -1,10 +1,11 @@
 package com.bootleg.brevo.runtime.entity;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Table(schema = "bootleg_runtime", name = "obs_application")
 public record ObsApplicationEntity(
@@ -15,7 +16,6 @@ public record ObsApplicationEntity(
   @Column("journey_id")
   UUID journeyId,
 
-  //JOURNEY CODE WILL BE USED HERE FIRST
   @Column("journey_code")
   String journeyCode,
 
@@ -23,7 +23,7 @@ public record ObsApplicationEntity(
   String customerRef,
 
   @Column("status")
-  String status,                 // IN_PROGRESS | READY_FOR_FINALISATION | COMPLETED | CANCELLED
+  String status,
 
   @Column("current_group_no")
   Integer currentGroupNo,
@@ -39,4 +39,5 @@ public record ObsApplicationEntity(
 
   @Column("updated_at")
   OffsetDateTime updatedAt
-) {}
+) {
+}

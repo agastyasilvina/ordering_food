@@ -2,7 +2,10 @@ package com.bootleg.brevo.runtime.controller;
 
 import com.bootleg.brevo.preload.PreloadSnapshot;
 import com.bootleg.brevo.preload.PreloadStore;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -15,13 +18,17 @@ public class RuntimeConfigController {
     this.preloadStore = preloadStore;
   }
 
-  /** Rebuild snapshot from DB (one consistent global refresh). */
+  /**
+   * Rebuild snapshot from DB (one consistent global refresh).
+   */
   @PostMapping("/refresh")
   public Mono<PreloadSnapshot> refreshAll() {
     return preloadStore.refreshAll();
   }
 
-  /** Return current snapshot (NO DB). */
+  /**
+   * Return current snapshot (NO DB).
+   */
   @GetMapping("/preloaded")
   public Mono<PreloadSnapshot> preloaded() {
     return Mono.just(preloadStore.current());

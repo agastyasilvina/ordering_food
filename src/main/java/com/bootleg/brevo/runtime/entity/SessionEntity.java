@@ -1,10 +1,11 @@
 package com.bootleg.brevo.runtime.entity;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Table("session")
 public record SessionEntity(
@@ -23,4 +24,5 @@ public record SessionEntity(
 
   @Column("ended_at")
   OffsetDateTime endedAt
-) {}
+) {
+}

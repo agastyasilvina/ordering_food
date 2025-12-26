@@ -101,17 +101,17 @@ public class ConfigRepository {
     String in = namedInClause("c", formCodes.size());
 
     String sql = """
-    SELECT f.form_code,
-           fld.field_code,
-           fld.field_type,
-           fft.is_required,
-           fft.sort_order AS field_sort_order
-    FROM brevo_config.form_tm f
-    JOIN brevo_config.form_field_tr fft ON fft.form_id = f.form_id
-    JOIN brevo_config.field_tm fld ON fld.field_id = fft.field_id
-    WHERE f.form_code IN ( %s )
-    ORDER BY f.form_code, fft.sort_order
-    """.formatted(in);
+      SELECT f.form_code,
+             fld.field_code,
+             fld.field_type,
+             fft.is_required,
+             fft.sort_order AS field_sort_order
+      FROM brevo_config.form_tm f
+      JOIN brevo_config.form_field_tr fft ON fft.form_id = f.form_id
+      JOIN brevo_config.field_tm fld ON fld.field_id = fft.field_id
+      WHERE f.form_code IN ( %s )
+      ORDER BY f.form_code, fft.sort_order
+      """.formatted(in);
 
     DatabaseClient.GenericExecuteSpec spec = db.sql(sql);
     for (int i = 0; i < formCodes.size(); i++) {
@@ -166,17 +166,17 @@ public class ConfigRepository {
     String in = namedInClause("r", formCodes.size());
 
     String sql = """
-    SELECT f.form_code,
-           fld.field_code,
-           r.rule_kind,
-           r.min_value,
-           r.max_value
-    FROM brevo_config.form_tm f
-    JOIN brevo_config.form_field_rule_tr r ON r.form_id = f.form_id
-    JOIN brevo_config.field_tm fld ON fld.field_id = r.field_id
-    WHERE f.form_code IN ( %s )
-    ORDER BY f.form_code, fld.field_code, r.rule_kind
-    """.formatted(in);
+      SELECT f.form_code,
+             fld.field_code,
+             r.rule_kind,
+             r.min_value,
+             r.max_value
+      FROM brevo_config.form_tm f
+      JOIN brevo_config.form_field_rule_tr r ON r.form_id = f.form_id
+      JOIN brevo_config.field_tm fld ON fld.field_id = r.field_id
+      WHERE f.form_code IN ( %s )
+      ORDER BY f.form_code, fld.field_code, r.rule_kind
+      """.formatted(in);
 
     DatabaseClient.GenericExecuteSpec spec = db.sql(sql);
     for (int i = 0; i < formCodes.size(); i++) {
@@ -198,11 +198,11 @@ public class ConfigRepository {
    */
   public Flux<String> findActiveJourneyCodes() {
     String sql = """
-    SELECT j.journey_code
-    FROM brevo_config.journey_tm j
-    WHERE j.is_active = true
-    ORDER BY j.journey_code
-    """;
+      SELECT j.journey_code
+      FROM brevo_config.journey_tm j
+      WHERE j.is_active = true
+      ORDER BY j.journey_code
+      """;
 
     return db.sql(sql)
       .map((row, md) -> must(row.get("journey_code", String.class)))
@@ -214,14 +214,14 @@ public class ConfigRepository {
    */
   public Flux<Integer> findGroupNosByJourneyCode(String journeyCode) {
     String sql = """
-    SELECT DISTINCT g.group_no
-    FROM brevo_config.journey_tm j
-    JOIN brevo_config.journey_group_tr jgt ON jgt.journey_id = j.journey_id
-    JOIN brevo_config.group_tm g ON g.group_id = jgt.group_id
-    WHERE j.journey_code = :journeyCode
-      AND j.is_active = true
-    ORDER BY g.group_no
-    """;
+      SELECT DISTINCT g.group_no
+      FROM brevo_config.journey_tm j
+      JOIN brevo_config.journey_group_tr jgt ON jgt.journey_id = j.journey_id
+      JOIN brevo_config.group_tm g ON g.group_id = jgt.group_id
+      WHERE j.journey_code = :journeyCode
+        AND j.is_active = true
+      ORDER BY g.group_no
+      """;
 
     return db.sql(sql)
       .bind("journeyCode", journeyCode)
@@ -239,7 +239,8 @@ public class ConfigRepository {
     String fieldType,
     boolean required,
     int sortOrder
-  ) {}
+  ) {
+  }
 
 
   public record ParentChildFormRow(String parentFormCode, String childFormCode) {
@@ -251,5 +252,6 @@ public class ConfigRepository {
     String ruleKind,
     BigDecimal min,
     BigDecimal max
-  ) {}
+  ) {
+  }
 }
