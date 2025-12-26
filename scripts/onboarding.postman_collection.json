@@ -257,6 +257,50 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Start-session",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"journeyCode\": \"JOURNEY_A\",\r\n  \"customerRef\": \"PID-00012345\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/runtime/sessions?restart=false",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"runtime",
+						"sessions"
+					],
+					"query": [
+						{
+							"key": "restart",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
