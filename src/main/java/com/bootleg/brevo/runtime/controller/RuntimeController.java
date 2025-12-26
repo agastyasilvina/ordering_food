@@ -37,17 +37,17 @@ public class RuntimeController {
   // 1) Session creation (in-memory UUID for now)
   // ---------------------------------------------------------------------------
 
-  @PostMapping("/sessions")
-  public Mono<StartSessionResponse> createSession(@RequestBody StartSessionRequest req) {
-    if (req == null || req.journeyCode() == null || req.journeyCode().trim().isEmpty()) {
-      return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "journeyCode is required"));
-    }
-
-    String journeyCode = req.journeyCode().trim().toUpperCase();
-    UUID sessionId = UUID.randomUUID();
-
-    return Mono.just(new StartSessionResponse(sessionId, journeyCode, 1, "IN_PROGRESS"));
-  }
+  //  @PostMapping("/sessions")
+  //  public Mono<StartSessionResponse> createSession(@RequestBody StartSessionRequest req) {
+  //    if (req == null || req.journeyCode() == null || req.journeyCode().trim().isEmpty()) {
+  //      return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "journeyCode is required"));
+  //    }
+  //
+  //    String journeyCode = req.journeyCode().trim().toUpperCase();
+  //    UUID sessionId = UUID.randomUUID();
+  //
+  //    return Mono.just(new StartSessionResponse(sessionId, journeyCode, 1, "IN_PROGRESS"));
+  //  }
 
   // ---------------------------------------------------------------------------
   // 2) Payload -> GroupSubmission mapping check
