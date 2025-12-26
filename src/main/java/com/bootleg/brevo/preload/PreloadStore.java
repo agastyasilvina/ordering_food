@@ -30,12 +30,42 @@ public class PreloadStore {
     this.groupLoader = groupLoader;
   }
 
-  /** Hot path: safe under heavy read traffic. */
+  private static List<String> flattenForms(List<FormDefinition> forms, Map<String, List<String>> child) {
+    LinkedHashSet<String> out = new LinkedHashSet<>();
+
+    List<FormDefinition> sorted = forms == null ? List.of()
+      : forms.stream().sorted(Comparator.comparingInt(FormDefinition::sortOrder)).toList();
+
+    for (FormDefinition f : sorted) {
+      out.add(f.formCode());
+      List<String> kids = child.getOrDefault(f.formCode(), List.of());
+      for (String c : kids) out.add(c);
+    }
+    return List.copyOf(out);
+  }
+
+  private static Map<String, List<String>> freezeChild(Map<String, List<String>> child) {
+    Map<String, List<String>> out = new HashMap<>();
+    for (var e : child.entrySet()) out.put(e.getKey(), List.copyOf(e.getValue()));
+    return Map.copyOf(out);
+  }
+
+  private static Map<String, List<Integer>> freezeJourneyGroups(Map<String, List<Integer>> in) {
+    Map<String, List<Integer>> out = new HashMap<>();
+    for (var e : in.entrySet()) out.put(e.getKey(), List.copyOf(e.getValue()));
+    return Map.copyOf(out);
+  }
+
+  /**
+   * Hot path: safe under heavy read traffic.
+   */
   public PreloadSnapshot current() {
     return snapshotRef.get();
   }
 
-  /** Cold path: rebuild from DB, single-flight (no stampede). */
+  /**
+   * Cold path: rebuild from DB, single-flight (no stampede).
+   */
   public Mono<PreloadSnapshot> refreshAll() {
     Mono<PreloadSnapshot> existing = refreshInFlight.get();
     if (existing != null) return existing;
@@ -149,31 +179,5 @@ public class PreloadStore {
       Map.copyOf(fieldMeta),
       Map.copyOf(fieldRules)
     );
-  }
-
-  private static List<String> flattenForms(List<FormDefinition> forms, Map<String, List<String>> child) {
-    LinkedHashSet<String> out = new LinkedHashSet<>();
-
-    List<FormDefinition> sorted = forms == null ? List.of()
-      : forms.stream().sorted(Comparator.comparingInt(FormDefinition::sortOrder)).toList();
-
-    for (FormDefinition f : sorted) {
-      out.add(f.formCode());
-      List<String> kids = child.getOrDefault(f.formCode(), List.of());
-      for (String c : kids) out.add(c);
-    }
-    return List.copyOf(out);
-  }
-
-  private static Map<String, List<String>> freezeChild(Map<String, List<String>> child) {
-    Map<String, List<String>> out = new HashMap<>();
-    for (var e : child.entrySet()) out.put(e.getKey(), List.copyOf(e.getValue()));
-    return Map.copyOf(out);
-  }
-
-  private static Map<String, List<Integer>> freezeJourneyGroups(Map<String, List<Integer>> in) {
-    Map<String, List<Integer>> out = new HashMap<>();
-    for (var e : in.entrySet()) out.put(e.getKey(), List.copyOf(e.getValue()));
-    return Map.copyOf(out);
   }
 }

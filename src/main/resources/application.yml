@@ -14,3 +14,13 @@ spring:
 
 server:
   port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+
+obs:
+  runtime:
+    session-ttl: PT30M
+
+

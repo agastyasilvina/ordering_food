@@ -37,5 +37,6 @@ public class PayloadValidationController {
     boolean valid,
     String message,
     List<ValidationError> errors
-  ) {}
+  ) {
+  }
 }

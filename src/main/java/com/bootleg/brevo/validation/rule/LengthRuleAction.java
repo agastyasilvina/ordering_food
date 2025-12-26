@@ -40,7 +40,10 @@ public class LengthRuleAction implements RuleAction {
 
   private Integer toInt(BigDecimal bd) {
     if (bd == null) return null;
-    try { return bd.intValueExact(); }
-    catch (ArithmeticException e) { return bd.intValue(); }
+    try {
+      return bd.intValueExact();
+    } catch (ArithmeticException e) {
+      return bd.intValue();
+    }
   }
 }

@@ -21,7 +21,13 @@ public class JsonSubmissionMapper {
     this.objectMapper = objectMapper;
   }
 
-  /** Parse raw JSON string into GroupSubmission. */
+  private static String uc(String s) {
+    return s == null ? "" : s.trim().toUpperCase();
+  }
+
+  /**
+   * Parse raw JSON string into GroupSubmission.
+   */
   public GroupSubmission fromJson(String json) {
     if (json == null || json.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body must not be empty");
@@ -34,7 +40,9 @@ public class JsonSubmissionMapper {
     }
   }
 
-  /** Convert JsonNode (already parsed by Jackson) into GroupSubmission. */
+  /**
+   * Convert JsonNode (already parsed by Jackson) into GroupSubmission.
+   */
   public GroupSubmission fromNode(JsonNode node) {
     if (node == null || node.isNull()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body must not be empty");
@@ -43,7 +51,9 @@ public class JsonSubmissionMapper {
     return normalise(parsed);
   }
 
-  /** Convert Map (e.g. @RequestBody Map) into GroupSubmission. */
+  /**
+   * Convert Map (e.g. @RequestBody Map) into GroupSubmission.
+   */
   public GroupSubmission fromMap(Map<String, Object> map) {
     if (map == null || map.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body must not be empty");
@@ -85,9 +95,5 @@ public class JsonSubmissionMapper {
     }
 
     return new GroupSubmission(version, Collections.unmodifiableList(fixed));
-  }
-
-  private static String uc(String s) {
-    return s == null ? "" : s.trim().toUpperCase();
   }
 }

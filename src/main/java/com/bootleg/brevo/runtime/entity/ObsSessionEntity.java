@@ -7,29 +7,20 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Table("application")
-public record ApplicationEntity(
+@Table(schema = "bootleg_runtime", name = "obs_session")
+public record ObsSessionEntity(
   @Id
+  @Column("session_id")
+  UUID sessionId,
+
   @Column("application_id")
   UUID applicationId,
 
-  @Column("journey_code")
-  String journeyCode,
-
-  @Column("customer_id")
-  String customerId,
-
-  @Column("client_id")
-  String clientId,
-
-  @Column("current_group_no")
-  Integer currentGroupNo,
-
-  @Column("furthest_group_no")
-  Integer furthestGroupNo,
-
   @Column("status")
-  String status,
+  String status,                 // ACTIVE | EXPIRED | CLOSED
+
+  @Column("expires_at")
+  OffsetDateTime expiresAt,
 
   @Column("created_at")
   OffsetDateTime createdAt,

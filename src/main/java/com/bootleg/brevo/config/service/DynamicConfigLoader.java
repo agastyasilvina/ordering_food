@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +67,7 @@ public class DynamicConfigLoader {
             return Mono.zip(fieldRowsMono, ruleRowsMono)
               .map(tuple -> {
                 var fieldRows = tuple.getT1();
-                var ruleRows  = tuple.getT2();
+                var ruleRows = tuple.getT2();
 
                 // rulesByForm -> field -> list of rules
                 Map<String, Map<String, List<FieldRule>>> rulesByFormField =

@@ -1,7 +1,8 @@
 package com.bootleg.brevo.preload;
 
 public final class PreloadKeys {
-  private PreloadKeys() {}
+  private PreloadKeys() {
+  }
 
   public static String groupKey(String journeyCode, int groupNo) {
     return journeyCode + "|" + groupNo;

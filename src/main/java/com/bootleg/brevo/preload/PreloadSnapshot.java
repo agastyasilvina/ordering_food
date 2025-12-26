@@ -50,5 +50,6 @@ public record PreloadSnapshot(
     FieldType fieldType,
     boolean required,
     int sortOrder
-  ) {}
+  ) {
+  }
 }

@@ -6,4 +6,5 @@ public record FieldRule(
   RuleKind kind,
   BigDecimal min,
   BigDecimal max
-) {}
+) {
+}

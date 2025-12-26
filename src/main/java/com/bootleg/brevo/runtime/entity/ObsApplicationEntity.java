@@ -7,20 +7,23 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Table("application")
-public record ApplicationEntity(
+@Table(schema = "bootleg_runtime", name = "obs_application")
+public record ObsApplicationEntity(
   @Id
   @Column("application_id")
   UUID applicationId,
 
+  @Column("journey_id")
+  UUID journeyId,
+
   @Column("journey_code")
   String journeyCode,
 
-  @Column("customer_id")
-  String customerId,
+  @Column("customer_ref")
+  String customerRef,
 
-  @Column("client_id")
-  String clientId,
+  @Column("status")
+  String status,
 
   @Column("current_group_no")
   Integer currentGroupNo,
@@ -28,8 +31,8 @@ public record ApplicationEntity(
   @Column("furthest_group_no")
   Integer furthestGroupNo,
 
-  @Column("status")
-  String status,
+  @Column("version")
+  Integer version,
 
   @Column("created_at")
   OffsetDateTime createdAt,
