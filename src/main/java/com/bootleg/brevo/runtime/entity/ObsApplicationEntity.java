@@ -15,6 +15,10 @@ public record ObsApplicationEntity(
   @Column("journey_id")
   UUID journeyId,
 
+  //JOURNEY CODE WILL BE USED HERE FIRST
+  @Column("journey_code")
+  String journeyCode,
+
   @Column("customer_ref")
   String customerRef,
 

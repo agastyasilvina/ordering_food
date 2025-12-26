@@ -3,6 +3,7 @@ package com.bootleg.brevo.runtime.service;
 import com.bootleg.brevo.runtime.config.ObsRuntimeProperties;
 import com.bootleg.brevo.runtime.entity.ObsApplicationEntity;
 import com.bootleg.brevo.runtime.entity.ObsSessionEntity;
+import com.bootleg.brevo.runtime.repo.BrevoJourneyConfigRepository;
 import com.bootleg.brevo.runtime.repo.ObsApplicationRepository;
 import com.bootleg.brevo.runtime.repo.ObsSessionRepository;
 import java.time.OffsetDateTime;
@@ -15,43 +16,59 @@ public class ObsRuntimeService {
 
   private final ObsApplicationRepository appRepo;
   private final ObsSessionRepository sessionRepo;
+  private final BrevoJourneyConfigRepository journeyConfigRepo;
+  private final JourneyPlanService journeyPlanService;
   private final ObsRuntimeProperties props;
 
   public ObsRuntimeService(
     ObsApplicationRepository appRepo,
     ObsSessionRepository sessionRepo,
+    BrevoJourneyConfigRepository journeyConfigRepo,
+    JourneyPlanService journeyPlanService,
     ObsRuntimeProperties props
   ) {
     this.appRepo = appRepo;
     this.sessionRepo = sessionRepo;
+    this.journeyConfigRepo = journeyConfigRepo;
+    this.journeyPlanService = journeyPlanService;
     this.props = props;
   }
 
-  public Mono<StartJourneyResult> startJourney(UUID journeyId, String customerRef) {
+  /**
+   * Start/resume a journey by journeyCode + customerRef.
+   * - Warms journey plan cache (brevo_config) so submit flow won't keep querying config.
+   * - Resolves journeyId from journeyCode.
+   * - Reuses existing IN_PROGRESS application if any; otherwise creates new.
+   * - Creates a new ACTIVE session every call (sliding TTL handled elsewhere).
+   */
+  public Mono<StartJourneyResult> startJourney(String journeyCode, String customerRef) {
     OffsetDateTime now = OffsetDateTime.now();
 
-    // TODO: validate journeyId exists in config schema (later)
-
-    return appRepo.findActiveByCustomerRef(customerRef, journeyId)
-      .switchIfEmpty(Mono.defer(() -> createNewApplication(journeyId, customerRef)))
-      .flatMap(app -> createSession(app, now)
-        .map(sess -> new StartJourneyResult(
-          sess.sessionId(),
-          app.applicationId(),
-          app.journeyId(),
-          app.customerRef(),
-          app.currentGroupNo(),
-          app.status(),
-          sess.expiresAt()
-        )));
+    return journeyPlanService.warmUp(journeyCode) // <-- this is the line you asked about
+      .then(journeyConfigRepo.findJourneyIdByCode(journeyCode))
+      .switchIfEmpty(Mono.error(new IllegalArgumentException("Invalid journeyCode: " + journeyCode)))
+      .flatMap(journeyId ->
+        appRepo.findActiveByCustomerRef(customerRef, journeyId)
+          .switchIfEmpty(Mono.defer(() -> createNewApplication(journeyId, journeyCode, customerRef)))
+          .flatMap(app -> createSession(app, now)
+            .map(sess -> new StartJourneyResult(
+              sess.sessionId(),
+              app.applicationId(),
+              app.journeyId(),
+              app.journeyCode(),
+              app.customerRef(),
+              app.currentGroupNo(),
+              app.status(),
+              sess.expiresAt()
+            )))
+      );
   }
 
-  private Mono<ObsApplicationEntity> createNewApplication(UUID journeyId, String customerRef) {
-    UUID appId = UUID.randomUUID();
-
+  private Mono<ObsApplicationEntity> createNewApplication(UUID journeyId, String journeyCode, String customerRef) {
     return appRepo.insertNew(
-      appId,
+      UUID.randomUUID(),
       journeyId,
+      journeyCode,
       customerRef,
       "IN_PROGRESS",
       0,   // current_group_no = last validated group; start at 0
@@ -75,6 +92,7 @@ public class ObsRuntimeService {
     UUID sessionId,
     UUID applicationId,
     UUID journeyId,
+    String journeyCode,
     String customerRef,
     int currentGroupNo,
     String applicationStatus,

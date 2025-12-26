@@ -26,6 +26,7 @@ public interface ObsApplicationRepository extends ReactiveCrudRepository<ObsAppl
     INSERT INTO bootleg_runtime.obs_application(
       application_id,
       journey_id,
+      journey_code,
       customer_ref,
       status,
       current_group_no,
@@ -37,6 +38,7 @@ public interface ObsApplicationRepository extends ReactiveCrudRepository<ObsAppl
     VALUES (
       :applicationId,
       :journeyId,
+      :journeyCode,
       :customerRef,
       :status,
       :currentGroupNo,
@@ -48,6 +50,7 @@ public interface ObsApplicationRepository extends ReactiveCrudRepository<ObsAppl
     RETURNING
       application_id,
       journey_id,
+      journey_code,
       customer_ref,
       status,
       current_group_no,
@@ -59,6 +62,7 @@ public interface ObsApplicationRepository extends ReactiveCrudRepository<ObsAppl
   Mono<ObsApplicationEntity> insertNew(
     UUID applicationId,
     UUID journeyId,
+    String journeyCode,
     String customerRef,
     String status,
     int currentGroupNo,
